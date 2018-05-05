@@ -3,8 +3,12 @@ from imutils.video import FPS
 import imutils
 from detect_lane import *
 
+<<<<<<< HEAD
 cap = cv2.VideoCapture("test_videos/test2.mp4")
 fps = FPS().start()
+=======
+cap = cv2.VideoCapture("test_videos/test2.flv")
+>>>>>>> 21eef618c3615d1c6daf47804e299b0f714838ba
 _, frame = cap.read()
 imshape = frame.shape
 A = (0.42*imshape[1], 0.53*imshape[0])
