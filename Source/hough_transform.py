@@ -1,19 +1,6 @@
-import os
-import logging
-import logging.handlers
-import random
-
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
 import cv2
-import glob
 import numpy as np
-import pickle
-from numpy.linalg import inv
-from scipy.signal import argrelextrema
-from moviepy.editor import VideoFileClip
-from collections import deque
-from scipy import ndimage
+
 
 from main import A, B
 

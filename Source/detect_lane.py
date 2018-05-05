@@ -1,23 +1,6 @@
-import os
-import logging
-import logging.handlers
-import random
-
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
-import cv2
-import glob
-import numpy as np
-import pickle
-from numpy.linalg import inv
-from scipy.signal import argrelextrema
-from moviepy.editor import VideoFileClip
-from collections import deque
-from scipy import ndimage
-
 from preprocessing_image import *
 from hough_transform import *
-
+from main import vertices
 QUEUE_LENGTH = 50
 
 
@@ -26,7 +9,7 @@ class LaneDetector:
         self.left_lines = deque(maxlen=QUEUE_LENGTH)
         self.right_lines = deque(maxlen=QUEUE_LENGTH)
 
-    def process(self, image, vertices):
+    def process(self, image):
         image_processed = preprocess_image(image)
         regions = region_of_interest(image_processed, vertices)
         lines = hough_lines(regions)

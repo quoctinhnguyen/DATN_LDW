@@ -20,7 +20,7 @@ fgbg = cv2.createBackgroundSubtractorMOG2()
 
 def preprocess_image(image):
     # undistort it
-    image = undistort(image)
+    # image = undistort(image)
 
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
