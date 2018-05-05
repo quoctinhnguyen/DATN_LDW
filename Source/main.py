@@ -28,15 +28,28 @@ C = (0.82*imshape[1], 0.75*imshape[0])
 D = (0.25*imshape[1], 0.75*imshape[0])
 vertices = np.array([[B, C, D, A]])
 
-while(cap.isOpened()):
-    ret, frame = cap.read()
+cap.set(cv2.CAP_PROP_FPS, 10)
 
-    detector = LaneDetector()
-    processed_img = detector.process(frame, vertices)
+# Find OpenCV version
+(major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')
 
-    cv2.imshow("Screen", processed_img)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+if int(major_ver) < 3:
+    fps = cap.get(cv2.cv.CV_CAP_PROP_FPS)
+    print(
+        "Frames per second using video.get(cv2.cv.CV_CAP_PROP_FPS): {0}".format(fps))
+else:
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    print(
+        "Frames per second using video.get(cv2.CAP_PROP_FPS) : {0}".format(fps))
+if __name__ == '__main__':
+    while(cap.isOpened()):
+        ret, frame = cap.read()
 
-cap.release()
-cv2.destroyAllWindows()
+        detector = LaneDetector()
+        processed_img = detector.process(frame, vertices)
+
+        cv2.imshow("Screen", processed_img)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    cap.release()
+    cv2.destroyAllWindows()

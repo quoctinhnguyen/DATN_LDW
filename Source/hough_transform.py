@@ -15,6 +15,8 @@ from moviepy.editor import VideoFileClip
 from collections import deque
 from scipy import ndimage
 
+from main import A, B
+
 
 def hough_lines(image):
     """
