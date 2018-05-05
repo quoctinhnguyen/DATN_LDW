@@ -3,13 +3,10 @@ from imutils.video import FPS
 import imutils
 from detect_lane import *
 
-<<<<<<< HEAD
 cap = cv2.VideoCapture("test_videos/test2.mp4")
 fps = FPS().start()
-=======
-cap = cv2.VideoCapture("test_videos/test2.flv")
->>>>>>> 21eef618c3615d1c6daf47804e299b0f714838ba
 _, frame = cap.read()
+frame = imutils.resize(frame, width=426)
 imshape = frame.shape
 A = (0.42*imshape[1], 0.53*imshape[0])
 B = (0.58*imshape[1], 0.53*imshape[0])
@@ -46,22 +43,12 @@ if __name__ == '__main__':
         ret, frame = cap.read()
         if not ret:
             break
-        # processed_img = preprocess_image(frame)
-        # detector = LaneDetector()
-        # processed_img = detector.process(frame, vertices)
+        frame = imutils.resize(frame, width=426)
+        detector = LaneDetector()
+        processed_img = detector.process(frame)
         # processed_img = region_of_interest(processed_img, vertices)
-        # resize the frame and convert it to grayscale (while still
-        # retaining 3 channels)
-        frame = imutils.resize(frame, width=450)
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        frame = np.dstack([frame, frame, frame])
 
-        # display a piece of text to the frame (so we can benchmark
-        # fairly against the fast method)
-        cv2.putText(frame, "Slow Method", (10, 30),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
-
-        cv2.imshow("Screen", frame)
+        cv2.imshow("Screen", processed_img)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
         fps.update()
