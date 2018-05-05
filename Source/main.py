@@ -19,7 +19,7 @@ from scipy import ndimage
 
 from detect_lane import *
 
-cap = cv2.VideoCapture("test_videos/test1.mp4")
+cap = cv2.VideoCapture("test_videos/test2.flv")
 _, frame = cap.read()
 imshape = frame.shape
 A = (0.42*imshape[1], 0.53*imshape[0])
