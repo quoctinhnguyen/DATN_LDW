@@ -44,17 +44,17 @@ class LaneDetector:
             anglel = np.arctan2(dly, dlx) * (180/np.pi)
             angler = np.arctan2(dry, drx) * (180/np.pi)
             if anglel > angler:
-                cv2.putText(image, 'Left', (10, 500), font, 4,
-                            (255, 255, 255), 2, cv2.LINE_AA)
+                cv2.putText(image, "Left", (10, 30),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
             else:
-                cv2.putText(image, 'Right', (10, 500), font, 4,
-                            (255, 255, 255), 2, cv2.LINE_AA)
+                cv2.putText(image, "Right", (10, 30),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
         elif left_line is None and right_line is not None:
-            cv2.putText(image, 'Right', (10, 500), font, 4,
-                        (255, 255, 255), 2, cv2.LINE_AA)
+            cv2.putText(image, "Right", (10, 30),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
         elif right_line is None and left_line is not None:
-            cv2.putText(image, 'Left', (10, 500), font, 4,
-                        (255, 255, 255), 2, cv2.LINE_AA)
+            cv2.putText(image, "Left", (10, 30),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
         else:
             print("error")
 
