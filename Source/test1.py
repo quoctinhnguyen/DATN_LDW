@@ -9,12 +9,14 @@ import cv2
 import glob
 import numpy as np
 import pickle
+import RPi.GPIO as GPIO
+import time
 from numpy.linalg import inv
 from scipy.signal import argrelextrema
 from moviepy.editor import VideoFileClip
 from collections import deque
 from scipy import ndimage
-
+from blink import *
 
 def denoise(frame):
     frame = cv2.medianBlur(frame, 5)
@@ -248,21 +250,26 @@ class LaneDetector:
             anglel = np.arctan2(dly, dlx) * (180/np.pi)
             angler = np.arctan2(dry, drx) * (180/np.pi)
             if anglel > angler:
-                cv2.putText(image, 'Left', (10, 500), font, 4,
-                            (255, 255, 255), 2, cv2.LINE_AA)
+                # cv2.putText(image, 'Left', (10, 500), font, 4,
+                #             (255, 255, 255), 2, cv2.LINE_AA)
+                red()
             else:
-                cv2.putText(image, 'Right', (10, 500), font, 4,
-                            (255, 255, 255), 2, cv2.LINE_AA)
+                # cv2.putText(image, 'Right', (10, 500), font, 4,
+                #             (255, 255, 255), 2, cv2.LINE_AA)
+                white()
         elif left_line is None and right_line is not None:
-            cv2.putText(image, 'Right', (10, 500), font, 4,
-                        (255, 255, 255), 2, cv2.LINE_AA)
+            # cv2.putText(image, 'Right', (10, 500), font, 4,
+            #             (255, 255, 255), 2, cv2.LINE_AA)
+            white()
         elif right_line is None and left_line is not None:
-            cv2.putText(image, 'Left', (10, 500), font, 4,
-                        (255, 255, 255), 2, cv2.LINE_AA)
+            # cv2.putText(image, 'Left', (10, 500), font, 4,
+            #             (255, 255, 255), 2, cv2.LINE_AA)
+            red()
         else:
             print("error")
 
-        return draw_lane_lines(image, (left_line, right_line))
+        # return draw_lane_lines(image, (left_line, right_line))
+        return image
 
 
 def undistort(img):
@@ -322,7 +329,7 @@ def is_contour_bad(c):
     return not len(approx) == 4
 
 
-cap = cv2.VideoCapture("test_videos/test1.mp4")
+cap = cv2.VideoCapture("test_videos/test2.mp4")
 _, frame = cap.read()
 imshape = frame.shape
 A = (0.42*imshape[1], 0.53*imshape[0])
@@ -331,22 +338,22 @@ C = (0.82*imshape[1], 0.75*imshape[0])
 D = (0.25*imshape[1], 0.75*imshape[0])
 vertices = np.array([[B, C, D, A]])
 fgbg = cv2.createBackgroundSubtractorMOG2()
-
+setup()
 
 while(cap.isOpened()):
     ret, frame = cap.read()
-    # processed_img = region_of_interest(frame, vertices)
-    # processed_img = process_image(frame)
-    detector = LaneDetector()
-    processed_img = detector.process(frame)
+    # # processed_img = region_of_interest(frame, vertices)
+    # # processed_img = process_image(frame)
+    # detector = LaneDetector()
+    # processed_img = detector.process(frame)
 
-    cv2.imshow("Screen", processed_img)
+    cv2.imshow("Screen", frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
 cap.release()
 cv2.destroyAllWindows()
-
+destroy()
 # def process_video(video_input, video_output):
 #     detector = LaneDetector()
 
