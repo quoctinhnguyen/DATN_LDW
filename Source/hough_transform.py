@@ -1,8 +1,6 @@
+from __future__ import division
 import cv2
 import numpy as np
-
-
-from main import A, B
 
 
 def hough_lines(image):
@@ -41,6 +39,7 @@ def average_slope_intercept(lines):
                 intercept = y1 - slope*x1
                 length = np.sqrt((y2-y1)**2+(x2-x1)**2)
                 anglel = np.arctan2(abs((y2-y1)), abs((x2-x1))) * (180/np.pi)
+
                 if anglel < 20:
                     continue
 
@@ -85,6 +84,10 @@ def make_line_points(y1, y2, line):
 
 
 def lane_lines(image, lines):
+    imshape = image.shape
+    A = (0.42*imshape[1], 0.53*imshape[0])
+    B = (0.58*imshape[1], 0.53*imshape[0])
+
     left_lane, right_lane = average_slope_intercept(lines)
 
     y1 = image.shape[0]  # bottom of the image
@@ -97,17 +100,17 @@ def lane_lines(image, lines):
         (xr1, yr1), (xr2, yr2) = right_line
         xa, ya = A
         xb, yb = B
-        if xr2 - xl2 < (xb-xa - 150):
+        if xr2 - xl2 < (xb-xa - 150*(imshape[1]/1280)):
             left_line = None
             right_lane = None
 
     if left_line is not None:
         (xl1, yl1), (xl2, yl2) = left_line
-        if xl2 > 640:
+        if xl2 > 640*(imshape[1]/1280):
             left_line = None
     if right_line is not None:
         (xr1, yr1), (xr2, yr2) = right_line
-        if xr2 < 600:
+        if xr2 < 600*(imshape[1]/1280):
             right_line = None
         if xr1 < xr2:
             right_line = None
@@ -120,7 +123,7 @@ def draw_lane_lines(image, lines, color=[255, 0, 0], thickness=20):
     line_image = np.zeros_like(image)
     for line in lines:
         if line is not None:
-            cv2.line(line_image, *line,  color, thickness)
-    # image1 * α + image2 * β + λ
+            cv2.line(line_image, *line,  color=color, thickness=thickness)
+    # image1 * a + image2 * b + lamda
     # image1 and image2 must be the same shape.
     return cv2.addWeighted(image, 1.0, line_image, 0.95, 0.0)

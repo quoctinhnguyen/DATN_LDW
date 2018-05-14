@@ -5,16 +5,10 @@ import imutils
 import time
 from detect_lane import *
 
-cap = cv2.VideoCapture("test_videos/test2.mp4")
+print("[INFO] starting video file thread...")
+cap = FileVideoStream("test_videos/test2.mp4").start()
+time.sleep(0.1)
 fps = FPS().start()
-_, frame = cap.read()
-# frame = imutils.resize(frame, width=450)
-imshape = frame.shape
-A = (0.42*imshape[1], 0.53*imshape[0])
-B = (0.58*imshape[1], 0.53*imshape[0])
-C = (0.82*imshape[1], 0.75*imshape[0])
-D = (0.25*imshape[1], 0.75*imshape[0])
-vertices = np.array([[B, C, D, A]])
 
 
 def process_video(video_input, video_output):
@@ -27,15 +21,13 @@ def process_video(video_input, video_output):
 
 
 if __name__ == '__main__':
-    while(cap.isOpened()):
-        ret, frame = cap.read()
-        if not ret:
-            break
+    while cap.more():
+        frame = cap.read()
         frame = imutils.resize(frame, width=450)
         detector = LaneDetector()
         processed_img = detector.process(frame)
+        # processed_img = preprocess_image(frame)
         # processed_img = region_of_interest(processed_img, vertices)
-
         cv2.imshow("Screen", processed_img)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
@@ -44,5 +36,6 @@ if __name__ == '__main__':
     fps.stop()
     print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
     print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
-    cap.release()
+
     cv2.destroyAllWindows()
+    cap.stop()

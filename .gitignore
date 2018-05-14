@@ -1,3 +1,4 @@
 Source/output_videos/
 Source/test_images/
 Source/test_videos/
+*.pyc

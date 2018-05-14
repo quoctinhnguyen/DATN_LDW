@@ -25,7 +25,6 @@ while fvs.more():
     # it, and convert it to grayscale (while still retaining 3
     # channels)
     frame = fvs.read()
-    frame = imutils.resize(frame, width=450)
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     frame = np.dstack([frame, frame, frame])
 

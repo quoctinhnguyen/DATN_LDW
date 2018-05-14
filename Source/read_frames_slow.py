@@ -24,7 +24,6 @@ while True:
 
     # resize the frame and convert it to grayscale (while still
     # retaining 3 channels)
-    frame = imutils.resize(frame, width=450)
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     frame = np.dstack([frame, frame, frame])
 

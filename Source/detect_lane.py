@@ -1,7 +1,6 @@
 from preprocessing_image import *
 from hough_transform import *
-from main import vertices
-QUEUE_LENGTH = 50
+QUEUE_LENGTH = 128
 
 
 class LaneDetector:
@@ -11,9 +10,10 @@ class LaneDetector:
 
     def process(self, image):
         image_processed = preprocess_image(image)
-        regions = region_of_interest(image_processed, vertices)
+        regions = region_of_interest(image_processed)
         lines = hough_lines(regions)
         left_line, right_line = lane_lines(image, lines)
+
         font = cv2.FONT_HERSHEY_SIMPLEX
 
         def mean_line(line, lines):
@@ -27,11 +27,7 @@ class LaneDetector:
             return line
 
         left_line = mean_line(left_line,  self.left_lines)
-        # print("Left")
-        # print(left_line)
         right_line = mean_line(right_line, self.right_lines)
-        # print("right")
-        # print(right_line)
         if left_line is not None and right_line is not None:
             (xl1, yl1), (xl2, yl2) = left_line
             (xr1, yr1), (xr2, yr2) = right_line
@@ -55,7 +51,5 @@ class LaneDetector:
         elif right_line is None and left_line is not None:
             cv2.putText(image, "Left", (10, 30),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
-        else:
-            print("error")
 
-        return draw_lane_lines(image, (left_line, right_line))
+        return draw_lane_lines(image, (left_line, right_line), thickness=10)

@@ -73,7 +73,13 @@ def subtract_background(image):
     return imaged
 
 
-def region_of_interest(img, vertices):
+def region_of_interest(img):
+    imshape = img.shape
+    A = (0.42*imshape[1], 0.53*imshape[0])
+    B = (0.58*imshape[1], 0.53*imshape[0])
+    C = (0.82*imshape[1], 0.75*imshape[0])
+    D = (0.25*imshape[1], 0.75*imshape[0])
+    vertices = np.array([[B, C, D, A]])
     # defining a blank mask to start with
     mask = np.zeros_like(img, dtype=np.uint8)
     # defining a 3 channel or 1 channel color to fill the mask with depending on the input image
